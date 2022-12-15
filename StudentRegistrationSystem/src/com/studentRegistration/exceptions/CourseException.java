@@ -1,4 +1,4 @@
-package com.studentmanagment.exceptions;
+package com.studentRegistration.exceptions;
 
 public class CourseException extends Exception{
 	public CourseException()

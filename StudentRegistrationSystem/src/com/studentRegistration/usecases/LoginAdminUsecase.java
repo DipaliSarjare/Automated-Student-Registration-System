@@ -1,10 +1,10 @@
-package com.studentmanagement.usecases;
+package com.studentRegistration.usecases;
 
 import java.util.Scanner;
 
-import com.studentmanagement.dao.AdminDao;
-import com.studentmanagement.dao.AdminDaoImpl;
-import com.studentmanagement.models.Admin;
+import com.studentRegistration.dao.AdminDao;
+import com.studentRegistration.dao.AdminDaoImpl;
+import com.studentRegistration.models.Admin;
 
 public class LoginAdminUsecase {
 	
