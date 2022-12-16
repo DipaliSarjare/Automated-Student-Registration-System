@@ -4,36 +4,39 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.List;
 import com.studentRegistration.exceptions.AdminException;
 import com.studentRegistration.exceptions.CourseException;
 import com.studentRegistration.exceptions.StudentException;
 import com.studentRegistration.models.Admin;
 import com.studentRegistration.models.Batch;
 import com.studentRegistration.models.Course;
+import com.studentRegistration.models.StudentDTO;
 import com.studentRegistration.utility.DBUtil;
 
 public  class AdminDaoImpl implements AdminDao{
 
 	@Override
-	public Admin loginAdmin(String name,String username, String password) {
+	public Admin loginAdmin(String username, String password) {
 		
 		Admin admin = null;
 		
 		try(Connection conn = DBUtil.provideConnection())
 		{
-			PreparedStatement ps = conn.prepareStatement("select * from admin where name=?, username=? , password=?");
-			ps.setString(1, name);
-			ps.setString(2, username);
-			ps.setString(3, password);
+			PreparedStatement ps = conn.prepareStatement("select * from administrator where username=? and password=?");
+			
+			ps.setString(1, username);
+			ps.setString(2, password);
 			
 			ResultSet rs = ps.executeQuery();
 			if(rs.next())
 			{
-				String nam = rs.getString("name");
 				String user = rs.getString("username");
 				String pass = rs.getString("password");
-				admin = new Admin(nam,user,pass);
+				admin = new Admin();
+				admin.setUsername(user);
+				admin.setPassword(pass);
 			}
 		}
 		catch(SQLException e)
@@ -76,7 +79,7 @@ public  class AdminDaoImpl implements AdminDao{
 
 	@Override
 	public String updateFees( String cname,int cfees) {
-String msg = null;
+           String msg = null;
 		
 		try(Connection conn = DBUtil.provideConnection())
 		{
@@ -108,7 +111,7 @@ String msg = null;
 	@Override
 	public String deleteCourse(int cid) throws CourseException {
 		
-String msg = "Course Not Deleted";
+            String msg = "Course Not Deleted";
 		
 		try(Connection conn = DBUtil.provideConnection())
 		{
@@ -200,50 +203,156 @@ String msg = "Course Not Deleted";
 		return message;
 	}
 
+	
 	@Override
-	public String allocateStudentInBatch(int bid, String bname) throws AdminException{
-String msg = "Not Registered";
+	public String allocateStudentInBatch(int roll, int bid, int cid) throws AdminException {
+           String message = null;
 		
-		try(Connection conn = DBUtil.provideConnection())
-		{
-			PreparedStatement ps1 = conn.prepareStatement("select * from student where roll=?");
-			ps1.setInt(1, bid);
-			ResultSet rs1 = ps1.executeQuery();
-			if(rs1.next())
-			{
+		try(Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("select * from student where roll = ?");
+			ps.setInt(1, roll);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()) {
 				
-					PreparedStatement ps3 = conn.prepareStatement("insert into student_batch values(?,?)");
-					ps3.setInt(1, bid);
-					ps3.setString(2, bname);
+				String studentName = rs.getString("sname");
+				PreparedStatement ps2 =  conn.prepareStatement("SELECT * from course where cid = ?");
+				ps2.setInt(1, cid);
+				
+				ResultSet rs2 = ps2.executeQuery();
+				
+				if(rs2.next()) {
 					
-					int x = ps3.executeUpdate();
-					if(x>0)
-					{
-						msg = "Successfull! Student registered in Batch";
-						PreparedStatement ps4 = conn.prepareStatement("update batch set seats=seats-1 where bname=?");
-						ps4.setString(1, bname);
-						int z = ps4.executeUpdate();
+					String courseName = rs2.getString("cname");
+					PreparedStatement ps3 = conn.prepareStatement("select bname,seats from batch where bid = ? AND cid = ?");
+					ps3.setInt(1, bid);
+					ps3.setInt(2, cid);
+					
+					ResultSet rs3 = ps3.executeQuery();
+					
+					if(rs3.next()) {
+						
+						String batchName = rs3.getString("bname");
+						int batchSeats = rs3.getInt("seats");
+						
+						if(batchSeats > 0) {
+							
+							batchSeats--;
+							PreparedStatement up = conn.prepareStatement("update batch set seats = ? WHERE bid = ?");
+							up.setInt(1, batchSeats);
+							up.setInt(2, bid);
+							
+							int r = up.executeUpdate();
+							
+							PreparedStatement p = conn.prepareStatement("insert into student_batch VALUES (?,?,?)");
+							p.setInt(1, roll);
+							p.setInt(2, cid);
+							p.setInt(3, bid);
+							
+							int res = p.executeUpdate();
+							
+							if(res > 0) {
+								
+								message = "Student "+studentName+" Added to Batch "+ batchName+" of Course "+courseName+" Successfully.";
+							
+							}
+							else {
+								throw new AdminException("Batch and Course Not Matching.");
+							}
+							
+							
+						}
+						else {
+							throw new AdminException("No Seats Available ! Add More Seats to Add more Student.");
+						}
+					}else {
+						throw new AdminException("Batch with Batch ID "+bid+" not Found !");
 					}
-					else
-					{
-						throw new AdminException("Student not allocated in Batch");
-					}
-				}
 
-			else
-			{
-				throw new AdminException("Student not found");
+				}else {
+					throw new AdminException("Course with course ID "+ cid + " not Found !");
+				}
+				
+			}else {
+				throw new AdminException("Student with Roll number "+ roll+ " not Found !");
 			}
+			
 		}
-		catch(SQLException e)
-		{
-			System.out.println(e.getMessage());
+		 catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new AdminException(e.getMessage());
 		}
 		
-		
-		return msg;
+		return message;
 	}
 
+	
+	@Override
+	public String updateSeatsOfBatch(int bid, int newSeats) throws AdminException {
+         String message = null;
+		
+		try(Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps =  conn.prepareStatement("update batch SET seats = ? where bid = ?");
+			ps.setInt(1, newSeats);
+			ps.setInt(2, bid);
+			
+			int res = ps.executeUpdate();
+			
+			if(res>0) message = "Batch ID : "+bid+" is Updated with Seats : "+ newSeats+" Successfully.";
+			else throw new AdminException("Batch ID Error.");
+			
+			
+		} catch (SQLException e) {
+			
+			throw new AdminException(e.getMessage());
+		}
+		return message;
+	}
+
+	@Override
+	public List<StudentDTO> viewStudentInAllBatches() throws AdminException {
+		List <StudentDTO> students= new ArrayList<>();
+try(Connection conn = DBUtil.provideConnection()){
+			
+			PreparedStatement ps = conn.prepareStatement("select s.roll,s.sname,c.cid,c.cname,b.bid,b.bname "
+					+ "from student s INNER JOIN batch b INNER JOIN course c INNER JOIN "
+					+ "student_batch sb ON c.cid = sb.cid AND b.bid = sb.bid");
+			ResultSet rs = ps.executeQuery();
+			
+			boolean flag = true;
+			
+			while(rs.next()) {
+				
+				int roll = rs.getInt("roll");
+				String sName = rs.getString("sname");
+				int cid = rs.getInt("cid");
+				String cName = rs.getString("cname");
+				int bid = rs.getInt("bid");
+				String bName = rs.getString("bname");
+				flag = false;
+				
+				
+				StudentDTO student = new StudentDTO(roll, sName, cid, cName, bid, bName);
+				students.add(student);
+				
+			}
+			
+			if(flag) throw new AdminException("No student added to Batch");
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			throw new AdminException(e.getMessage());
+			
+		}
+		return students;
+	}
+
+	
 	
 
 

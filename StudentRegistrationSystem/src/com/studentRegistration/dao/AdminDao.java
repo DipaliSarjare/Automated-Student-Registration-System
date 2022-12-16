@@ -7,9 +7,10 @@ import com.studentRegistration.exceptions.CourseException;
 import com.studentRegistration.models.Admin;
 import com.studentRegistration.models.Batch;
 import com.studentRegistration.models.Course;
+import com.studentRegistration.models.StudentDTO;
 
 public interface AdminDao {
-	public Admin loginAdmin(String name,String username, String password);
+	public Admin loginAdmin(String username, String password);
 	public String addCourse(Course course);	
 	public String updateFees(String cname,int cfees);
 	
@@ -17,7 +18,12 @@ public interface AdminDao {
 	
 	public Course courseInformation(String cname);
 	
-	String addBatchToCourse(Batch batch) throws AdminException;
+	public String addBatchToCourse(Batch batch) throws AdminException;
 	
-	public String allocateStudentInBatch(int bid, String bname) throws AdminException;
+	public String allocateStudentInBatch(int roll, int bid, int cid) throws AdminException;
+	
+	
+	public String updateSeatsOfBatch(int bid, int newSeats) throws AdminException;
+	
+	public List<StudentDTO> viewStudentInAllBatches() throws AdminException;
 }
