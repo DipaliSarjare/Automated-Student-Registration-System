@@ -10,7 +10,8 @@ public class UpdateSeatsToBatchUsecase {
 
 public static void main(String[] args) {
 	Scanner sc = new Scanner(System.in);
-	
+	System.out.println("Update seats into Batch");
+	System.out.println("==============================");
 	System.out.println("Enter Batch ID : ");
 
 	int bid = 0;

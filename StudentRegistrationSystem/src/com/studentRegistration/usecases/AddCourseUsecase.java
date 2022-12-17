@@ -13,7 +13,8 @@ public class AddCourseUsecase {
 		
 	
 		Scanner sc = new Scanner(System.in);
-		
+		System.out.println("Add New Course:");
+		System.out.println("=============================");
 	System.out.println("Enter Course Id");
 	int cid = sc.nextInt();
 	

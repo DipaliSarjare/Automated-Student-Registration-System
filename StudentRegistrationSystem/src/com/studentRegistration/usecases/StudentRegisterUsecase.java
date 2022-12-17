@@ -13,6 +13,8 @@ public class StudentRegisterUsecase {
 	public static void main(String[] args) throws StudentException {
 		
 		Scanner sc = new Scanner(System.in);
+		System.out.println("Student Register here:");
+		System.out.println("==================================================");
 		System.out.println("Enter Student Roll No.");
 		int roll=sc.nextInt();
 		System.out.println("Enter Student Name:");
