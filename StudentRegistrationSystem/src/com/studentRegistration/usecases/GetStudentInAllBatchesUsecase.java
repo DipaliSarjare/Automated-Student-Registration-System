@@ -18,7 +18,7 @@ public class GetStudentInAllBatchesUsecase {
 			else {
 				for(StudentDTO sd : students) {
 					System.out.println(sd);
-					System.out.println("----------------------------");
+					System.out.println("-----------------------------------------------------------------------------------");
 				}
 			}
 			

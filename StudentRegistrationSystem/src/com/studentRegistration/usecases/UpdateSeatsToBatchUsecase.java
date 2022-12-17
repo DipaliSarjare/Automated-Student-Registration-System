@@ -6,7 +6,7 @@ import com.studentRegistration.dao.AdminDao;
 import com.studentRegistration.dao.AdminDaoImpl;
 import com.studentRegistration.exceptions.AdminException;
 
-public class UpdateSteatsToBatchUsecase {
+public class UpdateSeatsToBatchUsecase {
 
 public static void main(String[] args) {
 	Scanner sc = new Scanner(System.in);

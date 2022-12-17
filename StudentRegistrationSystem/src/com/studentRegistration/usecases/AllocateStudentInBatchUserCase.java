@@ -12,6 +12,8 @@ public class AllocateStudentInBatchUserCase {
 public static void main(String[] args) {
 		
 
+
+	
 	Scanner sc = new Scanner(System.in);
 	
 	System.out.println("Add Student To Batch ");
@@ -24,6 +26,19 @@ public static void main(String[] args) {
 	try {
 		
 		roll = sc.nextInt();
+		
+	}catch(Exception e) {
+		System.out.println(e.getMessage());
+		System.out.println("Try Again !");
+		
+	}
+	System.out.println("Enter Batch ID : ");
+
+	int bid = 0;
+	
+	try {
+		
+		bid = sc.nextInt();
 		
 	}catch(Exception e) {
 		System.out.println(e.getMessage());
@@ -45,19 +60,7 @@ public static void main(String[] args) {
 		
 	}
 	
-	System.out.println("Enter Batch ID : ");
-
-	int bid = 0;
 	
-	try {
-		
-		bid = sc.nextInt();
-		
-	}catch(Exception e) {
-		System.out.println(e.getMessage());
-		System.out.println("Try Again !");
-		
-	}
 	
 	AdminDao ad = new AdminDaoImpl();
 	

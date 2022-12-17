@@ -65,7 +65,7 @@ public static void main(String[] args) {
 	System.out.println("Enter the number of seats in this batch : ");
 	int seats = sc.nextInt();
 	
-	Batch batch = new Batch(bid, bname, duration, seats, cid);
+	Batch batch = new Batch(bid, bname, duration,cid,seats);
 	
 	AdminDao ad = new AdminDaoImpl();
 	

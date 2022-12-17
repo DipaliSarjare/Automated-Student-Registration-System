@@ -206,11 +206,11 @@ public  class AdminDaoImpl implements AdminDao{
 	
 	@Override
 	public String allocateStudentInBatch(int roll, int bid, int cid) throws AdminException {
-           String message = null;
+String message = null;
 		
 		try(Connection conn = DBUtil.provideConnection()){
 			
-			PreparedStatement ps = conn.prepareStatement("select * from student where roll = ?");
+			PreparedStatement ps = conn.prepareStatement("SELECT * FROM student WHERE roll = ?");
 			ps.setInt(1, roll);
 			
 			ResultSet rs = ps.executeQuery();
@@ -218,7 +218,7 @@ public  class AdminDaoImpl implements AdminDao{
 			if(rs.next()) {
 				
 				String studentName = rs.getString("sname");
-				PreparedStatement ps2 =  conn.prepareStatement("SELECT * from course where cid = ?");
+				PreparedStatement ps2 =  conn.prepareStatement("SELECT * FROM course WHERE cid = ?");
 				ps2.setInt(1, cid);
 				
 				ResultSet rs2 = ps2.executeQuery();
@@ -226,7 +226,7 @@ public  class AdminDaoImpl implements AdminDao{
 				if(rs2.next()) {
 					
 					String courseName = rs2.getString("cname");
-					PreparedStatement ps3 = conn.prepareStatement("select bname,seats from batch where bid = ? AND cid = ?");
+					PreparedStatement ps3 = conn.prepareStatement("SELECT bname,seats FROM batch WHERE bid = ? AND cid = ?");
 					ps3.setInt(1, bid);
 					ps3.setInt(2, cid);
 					
@@ -240,13 +240,13 @@ public  class AdminDaoImpl implements AdminDao{
 						if(batchSeats > 0) {
 							
 							batchSeats--;
-							PreparedStatement up = conn.prepareStatement("update batch set seats = ? WHERE bid = ?");
+							PreparedStatement up = conn.prepareStatement("update batch set seats = ? where bid = ?");
 							up.setInt(1, batchSeats);
 							up.setInt(2, bid);
 							
 							int r = up.executeUpdate();
 							
-							PreparedStatement p = conn.prepareStatement("insert into student_batch VALUES (?,?,?)");
+							PreparedStatement p = conn.prepareStatement("insert into student_batch values (?,?,?)");
 							p.setInt(1, roll);
 							p.setInt(2, cid);
 							p.setInt(3, bid);
