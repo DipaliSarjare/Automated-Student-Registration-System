@@ -9,7 +9,8 @@ public class UpdateFeesUsecase {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		
+		System.out.println("Update fees");
+		System.out.println("=========================================");
 		System.out.println("Enter Course name to Update Fees");
 		String cname = sc.next();
 		System.out.println("Enter new Fees to Update");

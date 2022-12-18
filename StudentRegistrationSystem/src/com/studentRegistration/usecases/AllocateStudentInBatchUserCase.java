@@ -32,13 +32,13 @@ public static void main(String[] args) {
 		System.out.println("Try Again !");
 		
 	}
-	System.out.println("Enter Batch ID : ");
+	System.out.println("Enter Course ID : ");
 
-	int bid = 0;
+	int cid = 0;
 	
 	try {
 		
-		bid = sc.nextInt();
+		cid = sc.nextInt();
 		
 	}catch(Exception e) {
 		System.out.println(e.getMessage());
@@ -46,13 +46,13 @@ public static void main(String[] args) {
 		
 	}
 	
-	System.out.println("Enter Course ID : ");
+	System.out.println("Enter Batch ID  : ");
 
-	int cid = 0;
+	int bid = 0;
 	
 	try {
 		
-		cid =  sc.nextInt();
+		bid =  sc.nextInt();
 		
 	}catch(Exception e) {
 		System.out.println(e.getMessage());
@@ -66,7 +66,7 @@ public static void main(String[] args) {
 	
 	try {
 		
-		System.out.println(ad.allocateStudentInBatch(roll, bid, cid));
+		System.out.println(ad.allocateStudentInBatch(roll, cid, bid));
 		
 	} catch (AdminException e) {
 		// TODO: handle exception

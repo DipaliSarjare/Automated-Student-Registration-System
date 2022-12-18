@@ -49,6 +49,9 @@ public  class AdminDaoImpl implements AdminDao{
 		return admin;
 	}
 	
+	
+	//==========================================================================================================================================================
+	
 	@Override
 	public String addCourse(Course course) {
       String message = null;
@@ -76,7 +79,8 @@ public  class AdminDaoImpl implements AdminDao{
 		return message;
 	}
 	
-
+	//==========================================================================================================================================================
+	
 	@Override
 	public String updateFees( String cname,int cfees) {
            String msg = null;
@@ -107,7 +111,8 @@ public  class AdminDaoImpl implements AdminDao{
 		return msg;
 	}
 	
-
+	//==========================================================================================================================================================
+	
 	@Override
 	public String deleteCourse(int cid) throws CourseException {
 		
@@ -134,7 +139,9 @@ public  class AdminDaoImpl implements AdminDao{
 		}
 		return msg;
 	}
-
+	
+	//==========================================================================================================================================================
+	
 	@Override
 	public Course courseInformation(String cname) {
       Course course = null;
@@ -172,6 +179,8 @@ public  class AdminDaoImpl implements AdminDao{
 		return course;
 	}
 
+	//==========================================================================================================================================================
+	
 	@Override
 	public String addBatchToCourse(Batch batch) throws AdminException {
       String message = null;
@@ -203,14 +212,15 @@ public  class AdminDaoImpl implements AdminDao{
 		return message;
 	}
 
+	//==========================================================================================================================================================
 	
 	@Override
-	public String allocateStudentInBatch(int roll, int bid, int cid) throws AdminException {
-String message = null;
+	public String allocateStudentInBatch(int roll, int cid, int bid) throws AdminException {
+         String message = null;
 		
 		try(Connection conn = DBUtil.provideConnection()){
 			
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM student WHERE roll = ?");
+			PreparedStatement ps = conn.prepareStatement("select * from student where roll = ?");
 			ps.setInt(1, roll);
 			
 			ResultSet rs = ps.executeQuery();
@@ -218,7 +228,7 @@ String message = null;
 			if(rs.next()) {
 				
 				String studentName = rs.getString("sname");
-				PreparedStatement ps2 =  conn.prepareStatement("SELECT * FROM course WHERE cid = ?");
+				PreparedStatement ps2 =  conn.prepareStatement("select * from course where cid = ?");
 				ps2.setInt(1, cid);
 				
 				ResultSet rs2 = ps2.executeQuery();
@@ -226,7 +236,7 @@ String message = null;
 				if(rs2.next()) {
 					
 					String courseName = rs2.getString("cname");
-					PreparedStatement ps3 = conn.prepareStatement("SELECT bname,seats FROM batch WHERE bid = ? AND cid = ?");
+					PreparedStatement ps3 = conn.prepareStatement("select bname,seats from batch where bid = ? AND cid = ?");
 					ps3.setInt(1, bid);
 					ps3.setInt(2, cid);
 					
@@ -239,13 +249,6 @@ String message = null;
 						
 						if(batchSeats > 0) {
 							
-							batchSeats--;
-							PreparedStatement up = conn.prepareStatement("update batch set seats = ? where bid = ?");
-							up.setInt(1, batchSeats);
-							up.setInt(2, bid);
-							
-							int r = up.executeUpdate();
-							
 							PreparedStatement p = conn.prepareStatement("insert into student_batch values (?,?,?)");
 							p.setInt(1, roll);
 							p.setInt(2, cid);
@@ -255,24 +258,35 @@ String message = null;
 							
 							if(res > 0) {
 								
-								message = "Student "+studentName+" Added to Batch "+ batchName+" of Course "+courseName+" Successfully.";
+								PreparedStatement up = conn.prepareStatement("update batch set seats = seats-1 where bid = ?");
+								
+								up.setInt(1, bid);
+								
+								int r = up.executeUpdate();
+								if(r>0) {
+									
+									message = "Student "+studentName+" Added to Batch "+ batchName+" of Course "+courseName+" Successfully.";
+								}
+								
 							
 							}
 							else {
 								throw new AdminException("Batch and Course Not Matching.");
 							}
 							
-							
+				
 						}
+						
 						else {
 							throw new AdminException("No Seats Available ! Add More Seats to Add more Student.");
 						}
 					}else {
-						throw new AdminException("Batch with Batch ID "+bid+" not Found !");
+						
+						throw new AdminException("Course with course ID "+ cid + " not Found !");
 					}
 
 				}else {
-					throw new AdminException("Course with course ID "+ cid + " not Found !");
+					throw new AdminException("Batch with Batch ID "+bid+" not Found !");
 				}
 				
 			}else {
@@ -289,6 +303,7 @@ String message = null;
 		return message;
 	}
 
+	//==========================================================================================================================================================
 	
 	@Override
 	public String updateSeatsOfBatch(int bid, int newSeats) throws AdminException {
@@ -312,7 +327,10 @@ String message = null;
 		}
 		return message;
 	}
-
+	
+	
+	//==========================================================================================================================================================
+	
 	@Override
 	public List<StudentDTO> viewStudentInAllBatches() throws AdminException {
 		List <StudentDTO> students= new ArrayList<>();
@@ -351,12 +369,6 @@ try(Connection conn = DBUtil.provideConnection()){
 		}
 		return students;
 	}
-
-	
-	
-
-
-
 
 
 }

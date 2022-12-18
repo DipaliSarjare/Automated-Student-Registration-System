@@ -20,7 +20,7 @@ public interface AdminDao {
 	
 	public String addBatchToCourse(Batch batch) throws AdminException;
 	
-	public String allocateStudentInBatch(int roll, int bid, int cid) throws AdminException;
+	public String allocateStudentInBatch(int roll, int cid, int bid) throws AdminException;
 	
 	
 	public String updateSeatsOfBatch(int bid, int newSeats) throws AdminException;

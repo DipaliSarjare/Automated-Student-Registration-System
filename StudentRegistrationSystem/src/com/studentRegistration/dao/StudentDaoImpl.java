@@ -42,6 +42,7 @@ public class StudentDaoImpl implements StudentDao{
 		return message;
 	}
 	
+	//==========================================================================================================================================================
 	
 
 	@Override
@@ -75,6 +76,10 @@ public class StudentDaoImpl implements StudentDao{
 		return msg;
 
 	}
+	
+	
+	//==========================================================================================================================================================
+	
 	@Override
 	public String registerInCourse(int roll, int cid) throws StudentException {
 		String msg = "Not Registered";
@@ -100,6 +105,9 @@ public class StudentDaoImpl implements StudentDao{
 		}
 		return msg;
 	}
+	
+	
+	//==========================================================================================================================================================
 	
 	@Override
 	public String updateDetails(int roll, String field, String nData) throws StudentException {
@@ -128,7 +136,8 @@ public class StudentDaoImpl implements StudentDao{
 		return message;
 	}
 
-
+	//==========================================================================================================================================================
+	
 
 	@Override
 	public List<CoursesDTO> availableCourse() throws StudentException {

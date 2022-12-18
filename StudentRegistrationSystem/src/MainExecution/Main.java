@@ -12,11 +12,11 @@ import com.studentRegistration.utility.DBUtil;
 
 public class Main {
 	public static void main(String[] args) throws StudentException {
-		// TODO Auto-generated method stub
+		
 		Scanner sc = new Scanner(System.in);
 		
 		Connection conn = DBUtil.provideConnection();
-//		System.out.println("Database Connected Successfully!");
+
 		System.out.println("===============================");
 		System.out.println("Select Admin / Student");
 		System.out.println("-------------------------------");
@@ -30,7 +30,7 @@ public class Main {
 			
 			LoginAdminUsecase.main(null);
 			
-			// in loginAdmin() method provide all method of adminDao()
+			
 		}
 		else if(choice == 2)
 		{
