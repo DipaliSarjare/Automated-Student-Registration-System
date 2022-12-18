@@ -26,6 +26,9 @@ Roles for a Student:
 
 
 Flow of the project:-
+
+
+
 ![FlowDiagram](https://user-images.githubusercontent.com/105915562/208290552-abbad3cd-a538-4d45-a6fe-5b0e96668465.png)
 
 ER_Diagram:-
