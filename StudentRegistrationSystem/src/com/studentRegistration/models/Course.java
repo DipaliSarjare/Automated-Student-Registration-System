@@ -1,4 +1,4 @@
-package com.studentmanagement.models;
+package com.studentRegistration.models;
 
 public class Course {
 

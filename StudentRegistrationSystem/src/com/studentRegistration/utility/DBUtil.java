@@ -1,4 +1,4 @@
-package com.studentmanagement.utility;
+package com.studentRegistration.utility;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

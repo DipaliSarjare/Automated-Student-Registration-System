@@ -1,15 +1,16 @@
-package com.studentmanagement.usecases;
+package com.studentRegistration.usecases;
 
 import java.util.Scanner;
 
-import com.studentmanagement.dao.AdminDao;
-import com.studentmanagement.dao.AdminDaoImpl;
+import com.studentRegistration.dao.AdminDao;
+import com.studentRegistration.dao.AdminDaoImpl;
 
 public class UpdateFeesUsecase {
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
-		
+		System.out.println("Update fees");
+		System.out.println("=========================================");
 		System.out.println("Enter Course name to Update Fees");
 		String cname = sc.next();
 		System.out.println("Enter new Fees to Update");
