@@ -33,5 +33,5 @@ Flow of the project:-
 
 ER_Diagram:-
 
-![ER_Diagram](https://user-images.githubusercontent.com/105915562/208290687-8fff81b7-a611-49a0-ba27-ad55bffaf96b.png)
+![ER_Daigram1](https://user-images.githubusercontent.com/105915562/208309600-3fb83052-c3cc-49d2-9fc9-ee11aabd349a.png)
 
